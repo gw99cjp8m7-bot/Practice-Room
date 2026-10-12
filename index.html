@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Practice Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FFF6E5;
+    --bg2: #FFEFD1;
+    --panel: #FFFFFF;
+    --ink: #2D2A4A;
+    --ink-soft: #6B6690;
+    --coral: #FF6F59;
+    --coral-bright: #FF8A75;
+    --teal: #2EC4B6;
+    --teal-dark: #1FA79A;
+    --sun: #FFC93C;
+    --lav: #C9B6E4;
+    --line: rgba(45,42,74,0.12);
+    --cat-fur: #F4A259;
+    --cat-fur-dark: #E08434;
+    --cat-muzzle: #FFF3E0;
+    --cat-ear-inner: #FFB6A3;
+    --cat-nose: #FF6F59;
+    --cat-eye: #2D2A4A;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, #FFEFD1 0%, transparent 45%),
+      radial-gradient(circle at 100% 15%, #E9F9F7 0%, transparent 40%),
+      var(--bg);
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+  }
+  button{ font-family: inherit; cursor: pointer; }
+  input, select, textarea{ font-family: inherit; }
+
+  .app{ max-width: 760px; margin: 0 auto; padding: 24px 18px 80px; }
+
+  /* ---------- Header ---------- */
+  .app-header{
+    display:flex; align-items:center; justify-content: space-between;
+    padding-bottom: 16px; margin-bottom: 20px;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .app-title-row{ display:flex; align-items:center; gap: 10px; }
+  .app-title{ font-size: 24px; margin:0; color: var(--coral); }
+  .app-title span{ color: var(--ink); }
+  .who{ text-align:right; font-size: 13px; color: var(--ink-soft); }
+  .who b{ color: var(--ink); font-weight:800; }
+  .switch-link{
+    background:none; border:none; color: var(--ink-soft); font-size: 12px;
+    text-decoration: underline; padding: 0; margin-top: 4px;
+  }
+  .streak-pill{
+    display:inline-flex; align-items:center; gap:4px; background: var(--coral);
+    color:#fff; font-weight: 800; font-size: 12px; padding: 4px 10px 4px 8px;
+    border-radius: 20px; margin-left: 8px;
+  }
+
+  /* ---------- Gate (choose who you are) ---------- */
+  .gate{ padding-top: 4vh; text-align:center; }
+  .gate-mascot{ width: 140px; margin: 0 auto 6px; }
+  .mascot-trio{ display:flex; gap:10px; justify-content:center; margin-bottom:6px; }
+  .mascot-trio .mini{ width:58px; }
+  .mascot-pick{ display:flex; gap:8px; margin:8px 0 16px; }
+  .mascot-pick label{
+    flex:1; text-align:center; border:2px solid var(--line); border-radius:14px;
+    padding:8px 4px 6px; cursor:pointer; font-size:11px; font-weight:800; color:var(--ink-soft);
+  }
+  .mascot-pick label.selected{ border-color: var(--coral); color:var(--ink); background:#FFF1EC; }
+  .mascot-pick svg{ width:48px; display:block; margin:0 auto 4px; }
+  .speech-bubble{
+    display:inline-block; background:#fff; border-radius: 18px; padding: 10px 18px;
+    font-weight: 700; font-size: 15px; margin-bottom: 24px; position: relative;
+    box-shadow: 0 3px 0 var(--line);
+  }
+  .gate h1{ font-size: 34px; margin: 6px 0 6px; color: var(--coral); }
+  .gate p.sub{ color: var(--ink-soft); margin: 0 0 34px; font-size: 15px; font-weight:600; }
+  .gate-options{ display:flex; gap: 16px; justify-content:center; flex-wrap: wrap; }
+  .gate-card{
+    background: var(--panel); color: var(--ink); border-radius: 20px;
+    width: 280px; padding: 24px 22px; text-align:left;
+    box-shadow: 0 4px 0 var(--line);
+  }
+  .gate-card.teal{ box-shadow: 0 4px 0 rgba(46,196,182,0.35); }
+  .gate-card h3{ margin: 0 0 4px; font-size: 20px; }
+  .gate-card p{ margin: 0 0 16px; font-size: 13px; color: var(--ink-soft); line-height:1.5; font-weight:600;}
+  .gate-card input, .gate-card select{
+    width:100%; padding: 10px 12px; border: 2px solid var(--line);
+    background: #fff; border-radius: 12px; font-size: 14px; margin-bottom: 10px; font-weight:700;
+  }
+  .btn{
+    display:inline-block; background: var(--coral); color: #fff;
+    border: none; padding: 11px 18px; border-radius: 14px; font-size: 14px;
+    font-weight: 800; box-shadow: 0 3px 0 rgba(0,0,0,0.15); transition: transform 0.08s;
+  }
+  .btn:active{ transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .btn:hover{ background: var(--coral-bright); }
+  .btn-teal{ background: var(--teal); }
+  .btn-teal:hover{ background: var(--teal-dark); }
+  .btn-ghost{
+    background: #fff; border: 2px solid var(--line); color: var(--ink); box-shadow:none;
+  }
+  .btn-block{ width:100%; text-align:center; }
+  .btn:disabled{ opacity: 0.4; cursor: default; box-shadow:none; }
+
+  /* ---------- Tabs ---------- */
+  .tabs{ display:flex; gap: 6px; margin-bottom: 20px; flex-wrap:wrap; }
+  .tab{
+    background: var(--panel); border:none; color: var(--ink-soft); padding: 9px 16px;
+    font-size: 14px; font-weight: 800; border-radius: 12px;
+  }
+  .tab.active{ color: #fff; background: var(--coral); }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  .card{
+    background: var(--panel); color: var(--ink); border-radius: 20px;
+    padding: 22px; margin-bottom: 16px; box-shadow: 0 3px 0 var(--line);
+  }
+  .card h2{ font-size: 19px; margin: 0 0 4px; }
+  .card .hint{ color: var(--ink-soft); font-size: 13px; margin: 0 0 18px; font-weight:600; }
+
+  /* ---------- Streak card ---------- */
+  .streak-card{ display:flex; align-items:center; gap: 18px; flex-wrap: wrap; }
+  .streak-mascot{ width: 84px; flex-shrink:0; }
+  .streak-info{ flex:1; min-width:200px; }
+  .streak-num{ font-size: 34px; color: var(--coral); line-height:1; }
+  .streak-sub{ font-size: 12.5px; color: var(--ink-soft); font-weight:700; margin-bottom:10px; }
+  .week-strip{ display:flex; gap: 6px; }
+  .week-dot{
+    width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size: 10px; font-weight:800;
+    color: var(--ink-soft);
+  }
+  .week-dot.done{ background: var(--teal); border-color: var(--teal); color:#fff; }
+  .week-dot.today{ border-color: var(--coral); }
+
+  /* ---------- Metronome ---------- */
+  .metro-wrap{ display:flex; gap: 24px; align-items:center; flex-wrap: wrap; }
+  .pendulum-box{
+    width: 120px; height: 150px; position: relative; flex-shrink:0;
+    border-bottom: 4px solid var(--ink); border-radius: 2px;
+  }
+  .pendulum-arm{
+    position: absolute; bottom: 0; left: 50%; width: 4px; height: 130px;
+    background: var(--ink); transform-origin: bottom center; transform: rotate(-18deg); border-radius: 3px;
+  }
+  .pendulum-bob{
+    position:absolute; top: -9px; left: -8px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--coral);
+  }
+  .metro-controls{ flex: 1; min-width: 220px; }
+  .bpm-row{ display:flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  .bpm-num{ font-size: 50px; line-height: 1; color: var(--ink); }
+  .bpm-label{ color: var(--ink-soft); font-size: 13px; font-weight:700; }
+  input[type=range]{ width: 100%; accent-color: var(--coral); margin-bottom: 14px; }
+  .bpm-btnrow{ display:flex; gap:8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .bpm-btnrow button{
+    background: var(--bg2); border: none; color: var(--ink);
+    padding: 7px 13px; border-radius: 10px; font-size: 13px; font-weight:800;
+  }
+  .meter-select{ display:flex; gap: 6px; margin-bottom: 16px; }
+  .meter-select button{
+    background: var(--bg2); border: none; color: var(--ink);
+    padding: 7px 12px; border-radius: 10px; font-size: 13px; font-weight:800;
+  }
+  .meter-select button.active{ background: var(--ink); color: #fff; }
+  .beat-dots{ display:flex; gap: 8px; margin-bottom: 16px; height: 16px; }
+  .beat-dot{ width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--coral); }
+  .beat-dot.on{ background: var(--coral); }
+  .beat-dot.accent{ border-color: var(--sun); }
+  .beat-dot.accent.on{ background: var(--sun); }
+  .play-btn{ font-size: 15px; padding: 12px 28px; }
+
+  /* ---------- Tuner ---------- */
+  .tuner-body{ text-align:center; }
+  .tuner-note{ font-size: 68px; color: var(--ink); line-height:1; margin: 6px 0 2px; }
+  .tuner-freq{ color: var(--ink-soft); font-size: 13px; margin-bottom: 20px; font-weight:700;}
+  .tuner-meter{
+    position: relative; height: 50px; margin: 0 auto 20px; max-width: 420px;
+    background: var(--bg2); border-radius: 25px;
+  }
+  .tuner-center-line{
+    position:absolute; left: 50%; top:6px; bottom:6px; width: 2px; background: var(--ink-soft);
+  }
+  .tuner-needle{
+    position: absolute; top: 4px; width: 6px; height: 42px; background: var(--coral);
+    left: 50%; transform: translateX(-50%); border-radius: 3px; transition: left 0.08s linear, background 0.15s;
+  }
+  .tuner-needle.in-tune{ background: var(--teal); }
+  .tuner-status{ font-size: 13px; color: var(--ink-soft); min-height: 18px; margin-bottom: 18px; font-weight:700;}
+  .mic-note{ font-size: 12px; color: var(--ink-soft); margin-top: 14px; font-weight:600;}
+
+  /* ---------- Practice log ---------- */
+  .timer-row{ display:flex; align-items:center; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
+  .timer-display{ font-size: 38px; color: var(--ink); min-width: 120px; }
+  .field-row{ display:flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .field-row textarea, .field-row input{
+    flex: 1; min-width: 180px; padding: 10px 12px; border: 2px solid var(--line);
+    border-radius: 12px; font-size: 14px; background:#fff; color: var(--ink); font-weight:600;
+  }
+  .manual-add{ display:flex; gap:10px; margin-top: 6px; flex-wrap: wrap; align-items:center;}
+  .manual-add input[type=number]{ width: 90px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 12px; }
+  .log-entry{
+    display:flex; justify-content:space-between; gap: 14px; padding: 12px 0;
+    border-top: 2px dashed var(--line);
+  }
+  .log-entry .meta{ font-size: 12px; color: var(--ink-soft); font-weight:600;}
+  .log-entry .mins{ font-weight:800; color: var(--coral); white-space:nowrap; }
+  .log-empty{ color: var(--ink-soft); font-size: 13px; padding: 14px 0; font-weight:600;}
+  .week-total{
+    display:inline-block; background: var(--sun); color: var(--ink);
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 4px; font-weight:800;
+  }
+  .student-picker{ margin-bottom: 16px; }
+  .student-picker select{
+    padding: 9px 12px; border-radius: 12px; border: 2px solid var(--line); font-size: 14px; font-weight:700;
+  }
+  table.roster{ width:100%; border-collapse: collapse; font-size: 13px; }
+  table.roster th{ text-align:left; color: var(--ink-soft); font-weight:800; padding: 6px 4px; border-bottom: 2px solid var(--line); }
+  table.roster td{ padding: 9px 4px; border-bottom: 2px dashed var(--line); font-weight:600; }
+
+  /* ---------- Assignments ---------- */
+  .assign-item{
+    display:flex; align-items:flex-start; gap: 10px; padding: 12px 0;
+    border-top: 2px dashed var(--line);
+  }
+  .assign-item input[type=checkbox]{ margin-top: 3px; accent-color: var(--teal); width:18px; height:18px;}
+  .assign-text{ flex:1; font-size: 14px; font-weight:700; }
+  .assign-text.done{ text-decoration: line-through; color: var(--ink-soft); }
+  .assign-meta{ font-size: 11px; color: var(--ink-soft); font-weight:700; }
+  .assign-del{ background:none; border:none; color: var(--ink-soft); font-size: 12px; text-decoration: underline; }
+  .assign-form{ display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .assign-form select{ padding: 10px 12px; border: 2px solid var(--line); border-radius: 12px; }
+
+  .loading{ color: var(--ink-soft); font-size: 13px; padding: 40px 0; text-align:center; font-weight:700;}
+  .footnote{ color: var(--ink-soft); font-size: 11.5px; text-align:center; margin-top: 30px; line-height:1.6; font-weight:600;}
+
+  /* ---------- Scales ---------- */
+  .instrument-picker select{
+    width:100%; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line);
+    font-size: 15px; font-weight:700; margin-bottom: 18px; background:#fff;
+  }
+  .scale-card{
+    border-top: 2px dashed var(--line); padding: 14px 0;
+  }
+  .scale-card:first-child{ border-top:none; padding-top:0; }
+  .scale-card .concert-name{ font-weight:800; font-size: 14px; color: var(--ink-soft); }
+  .scale-card .written-name{ font-family:'Baloo 2',sans-serif; font-size:20px; color: var(--coral); margin: 2px 0 6px; }
+  .scale-notes{ display:flex; flex-wrap:wrap; gap:6px; }
+  .scale-note{
+    background: var(--bg2); color: var(--ink); font-weight:800; font-size: 13px;
+    padding: 5px 11px; border-radius: 10px;
+  }
+  .scale-note.tonic{ background: var(--teal); color:#fff; }
+  .scale-note.arpeggio{ background: var(--sun); color: var(--ink); }
+
+  /* ---------- Ask & Share ---------- */
+  .ask-type-row{ display:flex; gap:10px; margin-bottom:16px; }
+  .ask-type-btn{
+    flex:1; padding:14px 10px; border-radius:14px; border:2px solid var(--line);
+    background:#fff; font-weight:800; font-size:14px; color:var(--ink-soft); text-align:center;
+  }
+  .ask-type-btn.selected.help{ background:var(--coral); border-color:var(--coral); color:#fff; }
+  .ask-type-btn.selected.showoff{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .record-row{ display:flex; align-items:center; gap:12px; justify-content:center; margin:14px 0; flex-wrap:wrap; }
+  .record-btn{
+    display:flex; align-items:center; gap:8px; padding:11px 20px; border-radius:14px;
+    border:none; font-weight:800; font-size:14px; background:var(--bg2); color:var(--ink);
+  }
+  .record-btn.recording{ background:var(--coral); color:#fff; }
+  .record-dot{ width:10px; height:10px; border-radius:50%; background:currentColor; }
+  .record-dot.pulse{ animation: recPulse 1s ease-in-out infinite; }
+  @keyframes recPulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .ask-msg-card{ border-top:2px dashed var(--line); padding:14px 0; }
+  .ask-msg-card:first-child{ border-top:none; padding-top:0; }
+  .ask-msg-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+  .ask-badge{ font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; color:#fff; }
+  .ask-badge.help{ background:var(--coral); }
+  .ask-badge.showoff{ background:var(--teal); }
+  .ask-msg-meta{ font-size:11px; color:var(--ink-soft); font-weight:700; }
+  .ask-msg-text{ font-size:14px; font-weight:600; margin:6px 0; line-height:1.5; }
+  .ask-msg-card audio{ width:100%; margin-top:8px; }
+  .ask-resolved-pill{ font-size:11px; font-weight:800; color:var(--teal); }
+
+  /* ---------- Streak celebration ---------- */
+  .streak-overlay{
+    position:fixed; inset:0; background:rgba(45,42,74,0.55);
+    display:flex; align-items:center; justify-content:center; z-index:9999;
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease;
+  }
+  .streak-overlay.show{ opacity:1; pointer-events:auto; }
+  .streak-pop{
+    position:relative; background: var(--panel); border-radius: 24px;
+    padding: 34px 28px 26px; text-align:center; max-width: 270px;
+    transform: scale(0.5); transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+    box-shadow: 0 10px 0 rgba(0,0,0,0.18);
+  }
+  .streak-overlay.show .streak-pop{ transform: scale(1); }
+  .streak-pop .flame{
+    font-size: 48px; display:block; margin-bottom: 2px;
+    animation: flameFlicker 0.5s ease-in-out infinite alternate;
+  }
+  @keyframes flameFlicker{
+    from{ transform: scale(1) rotate(-4deg); }
+    to{ transform: scale(1.1) rotate(4deg); }
+  }
+  .streak-pop .mascot-mini{ width: 84px; margin: 2px auto 8px; }
+  .streak-pop h3{ margin: 2px 0 4px; font-size: 22px; color: var(--coral); }
+  .streak-pop p{ margin:0; font-size: 13px; color: var(--ink-soft); font-weight:700; }
+  .confetti-dot{
+    position:absolute; top:50%; left:50%; width:9px; height:9px; border-radius:50%;
+    opacity:0; animation: confettiBurst 0.9s ease-out forwards;
+  }
+  @keyframes confettiBurst{
+    0%{ transform: rotate(var(--angle)) translateY(0) scale(0.5); opacity:1; }
+    100%{ transform: rotate(var(--angle)) translateY(-95px) scale(1); opacity:0; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="loading">Tuning up…</div>
+</div>
+
+<script>
+(function(){
+
+/* ================= Storage helpers =================
+   Ported from the Claude-artifact version of this app, which used
+   window.storage. That API only exists inside Claude — it's not a
+   real browser API — so on Cloudflare Pages: personal (non-shared)
+   data uses the browser's own localStorage (per-device, no server
+   needed), and shared data (roster, classrooms, logs, assignments —
+   the stuff every student/teacher needs to see) goes through the
+   /api/storage Pages Function, backed by Cloudflare KV. */
+async function sGet(key, shared){
+  try{
+    if(!shared){
+      const raw = localStorage.getItem('pr:' + key);
+      return raw ? JSON.parse(raw) : null;
+    }
+    const res = await fetch('/api/storage?key=' + encodeURIComponent(key), { cache: 'no-store' });
+    if(!res.ok) return null;
+    const data = await res.json();
+    return (data && typeof data.value === 'string') ? JSON.parse(data.value) : null;
+  } catch(e){ return null; }
+}
+async function sSet(key, value, shared){
+  try{
+    if(!shared){
+      localStorage.setItem('pr:' + key, JSON.stringify(value));
+      return;
+    }
+    await fetch('/api/storage', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, value: JSON.stringify(value) })
+    });
+  } catch(e){ console.error('storage set failed', e); }
+}
+
+/* ================= Mascots (pick a practice buddy) ================= */
+const MASCOTS = {
+  pug:     { name: 'Rocco',   label: 'Rocco the Pug' },
+  otter:   { name: 'Maestro', label: 'Maestro the Otter' },
+  bulldog: { name: 'Rocket',  label: 'Rocket the Bulldog' }
+};
+function animalPalette(kind){
+  if(kind === 'otter') return { fur:'#A9754F', furDark:'#8C5E3C', muzzle:'#F5E6D3', nose:'#3A2A1E' };
+  if(kind === 'bulldog') return { fur:'#D9A066', furDark:'#B97F45', muzzle:'#4A4038', nose:'#1F1B18' };
+  return { fur:'#3A3532', furDark:'#252220', muzzle:'#4E4842', nose:'#141210' }; // pug
+}
+function mascotEars(kind, p){
+  if(kind === 'otter'){
+    return `<circle cx="52" cy="58" r="15" fill="${p.fur}"/><circle cx="148" cy="58" r="15" fill="${p.fur}"/>
+            <circle cx="52" cy="58" r="7" fill="${p.furDark}" opacity="0.5"/><circle cx="148" cy="58" r="7" fill="${p.furDark}" opacity="0.5"/>`;
+  }
+  if(kind === 'bulldog'){
+    return `<path d="M42 58 Q22 95 44 118 Q58 95 56 58 Z" fill="${p.fur}"/>
+            <path d="M158 58 Q178 95 156 118 Q142 95 144 58 Z" fill="${p.fur}"/>`;
+  }
+  // pug: small rounded folded drop ears, close to the head
+  return `<ellipse cx="40" cy="74" rx="15" ry="23" fill="${p.fur}" transform="rotate(-18 40 74)"/>
+          <ellipse cx="160" cy="74" rx="15" ry="23" fill="${p.fur}" transform="rotate(18 160 74)"/>`;
+}
+function mascotFace(kind, p){
+  if(kind === 'otter'){
+    return `<ellipse cx="100" cy="130" rx="40" ry="26" fill="${p.muzzle}"/>
+            <line x1="62" y1="128" x2="32" y2="122" stroke="${p.furDark}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="62" y1="136" x2="32" y2="140" stroke="${p.furDark}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="138" y1="128" x2="168" y2="122" stroke="${p.furDark}" stroke-width="3" stroke-linecap="round"/>
+            <line x1="138" y1="136" x2="168" y2="140" stroke="${p.furDark}" stroke-width="3" stroke-linecap="round"/>`;
+  }
+  if(kind === 'bulldog'){
+    return `<path d="M64 88 Q100 78 136 88" stroke="${p.furDark}" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.6"/>
+            <ellipse cx="100" cy="140" rx="46" ry="27" fill="${p.muzzle}"/>
+            <ellipse cx="70" cy="142" rx="12" ry="16" fill="${p.muzzle}"/>
+            <ellipse cx="130" cy="142" rx="12" ry="16" fill="${p.muzzle}"/>`;
+  }
+  // pug: flat wide wrinkly face, muzzle set high and close (short snout)
+  return `<path d="M62 82 Q100 71 138 82" stroke="${p.furDark}" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M66 92 Q100 83 134 92" stroke="${p.furDark}" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.45"/>
+          <line x1="100" y1="76" x2="100" y2="94" stroke="${p.furDark}" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+          <ellipse cx="100" cy="130" rx="46" ry="27" fill="${p.muzzle}"/>
+          <path d="M76 120 Q100 113 124 120" stroke="${p.furDark}" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>`;
+}
+function mascotSvg(kind, mood){
+  // kind: 'pug' | 'otter' | 'bulldog'   mood: 'excited' | 'happy' | 'calm'
+  const p = animalPalette(kind);
+  const ink = '#2D2A4A';
+  let eyes, mouth, extras = '';
+  if(mood === 'excited'){
+    eyes = `<circle cx="76" cy="108" r="10" fill="${ink}"/><circle cx="124" cy="108" r="10" fill="${ink}"/>
+            <circle cx="79" cy="105" r="3" fill="#fff"/><circle cx="127" cy="105" r="3" fill="#fff"/>`;
+    mouth = `<path d="M78 130 Q100 150 122 130" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    extras = `<path d="M40 30 l4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4z" fill="var(--sun)"/>
+               <path d="M162 40 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z" fill="var(--sun)"/>`;
+  } else if(mood === 'happy'){
+    eyes = `<circle cx="76" cy="108" r="8" fill="${ink}"/><circle cx="124" cy="108" r="8" fill="${ink}"/>
+            <circle cx="78.5" cy="105.5" r="2.5" fill="#fff"/><circle cx="126.5" cy="105.5" r="2.5" fill="#fff"/>`;
+    mouth = `<path d="M82 128 Q100 140 118 128" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  } else {
+    eyes = `<path d="M68 108 Q76 100 84 108" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M116 108 Q124 100 132 108" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    mouth = `<path d="M86 128 Q100 136 114 128" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  }
+  if(kind === 'pug'){
+    const browY = mood === 'excited' ? 91 : (mood === 'happy' ? 95 : 99);
+    eyes = `<circle cx="74" cy="112" r="12" fill="${ink}"/><circle cx="126" cy="112" r="12" fill="${ink}"/>
+            <circle cx="77.5" cy="108.5" r="3.5" fill="#fff"/><circle cx="129.5" cy="108.5" r="3.5" fill="#fff"/>
+            <path d="M62 ${browY} Q74 ${browY-6} 86 ${browY}" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>
+            <path d="M114 ${browY} Q126 ${browY-6} 138 ${browY}" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>`;
+    mouth = mood === 'excited'
+      ? `<path d="M80 138 Q100 152 120 138" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="100" cy="146" rx="7" ry="5" fill="#FF9E8C"/>`
+      : mood === 'happy'
+        ? `<path d="M84 136 Q100 145 116 136" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>`
+        : `<path d="M88 134 Q100 138 112 134" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  }
+  return `
+  <svg viewBox="0 0 200 190" xmlns="http://www.w3.org/2000/svg">
+    ${extras}
+    ${mascotEars(kind, p)}
+    <circle cx="100" cy="112" r="68" fill="${p.fur}"/>
+    ${mascotFace(kind, p)}
+    ${eyes}
+    <ellipse cx="100" cy="${kind==='pug'?126:124}" rx="${kind==='pug'?9:8}" ry="${kind==='pug'?7:6}" fill="${p.nose}"/>
+    ${mouth}
+  </svg>`;
+}
+function defaultMascot(){ return 'otter'; }
+
+/* ================= App state ================= */
+let state = {
+  roster: [],
+  me: null,
+  activeTab: 'metronome',
+  viewingStudentId: null,
+  classrooms: [],
+  viewingClassroomId: null,
+  pendingClassCode: '',
+  classCodeError: '',
+};
+
+const el = document.getElementById('app');
+
+/* ================= Boot ================= */
+async function boot(){
+  state.classrooms = (await sGet('classrooms', true)) || [];
+  await migrateLegacyRosterIfNeeded();
+  const savedProfile = await sGet('my-profile', false);
+  if(savedProfile && savedProfile.role === 'teacher'){
+    state.me = savedProfile;
+    state.viewingClassroomId = state.classrooms[0] ? state.classrooms[0].id : null;
+    if(state.viewingClassroomId) await loadRosterForClassroom(state.viewingClassroomId);
+  } else if(savedProfile && savedProfile.classroomId){
+    const cls = state.classrooms.find(c=>c.id===savedProfile.classroomId);
+    if(cls){
+      await loadRosterForClassroom(cls.id);
+      if(state.roster.find(s=>s.id===savedProfile.id)){
+        state.me = savedProfile;
+        startSessionTimer();
+      }
+    }
+  }
+  if(!state.me){
+    const params = new URLSearchParams(location.search);
+    state.pendingClassCode = (params.get('class') || '').toUpperCase();
+  }
+  render();
+}
+function genClassCode(){
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // no O/0/I/1 to avoid mix-ups
+  let s = '';
+  for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+async function migrateLegacyRosterIfNeeded(){
+  if(state.classrooms.length > 0) return;
+  const legacyRoster = await sGet('roster', true);
+  if(legacyRoster && legacyRoster.length > 0){
+    const newId = uid();
+    const cls = { id:newId, name:'My Class', code: genClassCode() };
+    state.classrooms = [cls];
+    await sSet('classrooms', state.classrooms, true);
+    await sSet('roster:' + newId, legacyRoster, true);
+  }
+}
+async function loadRosterForClassroom(classroomId){
+  state.roster = classroomId ? ((await sGet('roster:' + classroomId, true)) || []) : [];
+  if(!state.viewingStudentId || !state.roster.find(s=>s.id===state.viewingStudentId)){
+    state.viewingStudentId = state.roster[0] ? state.roster[0].id : null;
+  }
+}
+async function createNewClassroom(){
+  const name = prompt('Name this class (e.g. "Period 3 Band"):', '');
+  if(!name || !name.trim()) return;
+  const newCls = { id: uid(), name: name.trim(), code: genClassCode() };
+  const liveClassrooms = (await sGet('classrooms', true)) || [];
+  liveClassrooms.push(newCls);
+  await sSet('classrooms', liveClassrooms, true);
+  state.classrooms = liveClassrooms;
+  state.viewingClassroomId = newCls.id;
+  state.viewingStudentId = null;
+  await loadRosterForClassroom(newCls.id);
+  renderMain();
+}
+
+function uid(){ return 's_' + Math.random().toString(36).slice(2,10); }
+
+function render(){
+  if(!state.me){ renderGate(); return; }
+  renderMain();
+}
+
+/* ================= Gate screen ================= */
+async function renderGate(){
+  const code = (state.pendingClassCode || '').toUpperCase();
+  const foundClassroom = state.classrooms.find(c=>c.code===code);
+  let classroomRoster = [];
+  if(foundClassroom){
+    classroomRoster = (await sGet('roster:' + foundClassroom.id, true)) || [];
+  }
+  let pickedMascot = 'pug';
+  const studentCardInner = !foundClassroom ? `
+    <p>Enter the class code your teacher gave you.</p>
+    <input type="text" id="classCodeInput" placeholder="e.g. 7F3K9Q" value="${escapeHtml(code)}" style="text-transform:uppercase;">
+    <button class="btn btn-block" id="findClass">Find my class</button>
+    ${state.classCodeError ? `<p style="color:var(--coral);font-size:12px;font-weight:700;margin-top:10px;">${escapeHtml(state.classCodeError)}</p>` : ''}
+  ` : `
+    <p style="font-size:12px;color:var(--ink-soft);font-weight:700;">Joining <b style="color:var(--ink);">${escapeHtml(foundClassroom.name)}</b> — <button class="switch-link" id="notMyClass" style="display:inline;font-size:12px;">not your class?</button></p>
+    <select id="studentSelect">
+      <option value="">— choose your name —</option>
+      ${classroomRoster.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}
+    </select>
+    <button class="btn btn-block" id="joinExisting" ${classroomRoster.length? '' : 'disabled'}>Continue</button>
+    <p style="margin:14px 0 4px; font-size:12px; color:var(--ink-soft); font-weight:700;">New here?</p>
+    <input type="text" id="newStudentName" placeholder="Type your name">
+    <p style="margin:10px 0 4px; font-size:12px; color:var(--ink-soft); font-weight:700;">Choose your practice buddy:</p>
+    <div class="mascot-pick" id="mascotPick">
+      ${Object.keys(MASCOTS).map((k,i)=>`
+        <label class="${i===0?'selected':''}" data-kind="${k}">
+          ${mascotSvg(k,'happy')}
+          ${MASCOTS[k].name}
+        </label>
+      `).join('')}
+    </div>
+    <button class="btn btn-ghost btn-block" id="joinNew">Add me &amp; continue</button>
+  `;
+  el.innerHTML = `
+    <div class="gate">
+      <div class="mascot-trio">
+        ${Object.keys(MASCOTS).map(k=>`<div class="mini">${mascotSvg(k,'happy')}</div>`).join('')}
+      </div>
+      <div class="speech-bubble">Pick your practice buddy and let's get started! 🎵</div>
+      <h1>The Practice Room</h1>
+      <p class="sub">Metronome, tuner, and practice log — shared with your teacher.</p>
+      <div class="gate-options">
+        <div class="gate-card">
+          <h3>I'm a student</h3>
+          ${studentCardInner}
+        </div>
+        <div class="gate-card teal">
+          <h3>I'm the teacher</h3>
+          <p>See every student's practice time and set what they should work on next.</p>
+          <button class="btn btn-teal btn-block" id="teacherEnter">Enter teacher view</button>
+        </div>
+      </div>
+    </div>
+  `;
+  if(!foundClassroom){
+    document.getElementById('findClass').onclick = async ()=>{
+      const entered = document.getElementById('classCodeInput').value.trim().toUpperCase();
+      state.classrooms = (await sGet('classrooms', true)) || [];
+      const match = state.classrooms.find(c=>c.code===entered);
+      state.pendingClassCode = entered;
+      state.classCodeError = match ? '' : "Couldn't find a class with that code — double check with your teacher.";
+      renderGate();
+    };
+  } else {
+    document.getElementById('notMyClass').onclick = ()=>{
+      state.pendingClassCode = '';
+      state.classCodeError = '';
+      renderGate();
+    };
+    document.querySelectorAll('#mascotPick label').forEach(lbl=>{
+      lbl.onclick = ()=>{
+        pickedMascot = lbl.dataset.kind;
+        document.querySelectorAll('#mascotPick label').forEach(l=>l.classList.remove('selected'));
+        lbl.classList.add('selected');
+      };
+    });
+    document.getElementById('joinExisting').onclick = async ()=>{
+      const id = document.getElementById('studentSelect').value;
+      if(!id) return;
+      const s = classroomRoster.find(r=>r.id===id);
+      state.me = { id: s.id, name: s.name, role: 'student', classroomId: foundClassroom.id };
+      state.roster = classroomRoster;
+      await sSet('my-profile', state.me, false);
+      startSessionTimer();
+      render();
+    };
+    document.getElementById('joinNew').onclick = async ()=>{
+      const name = document.getElementById('newStudentName').value.trim();
+      if(!name) return;
+      const newS = { id: uid(), name, mascot: pickedMascot };
+      classroomRoster.push(newS);
+      await sSet('roster:' + foundClassroom.id, classroomRoster, true);
+      state.roster = classroomRoster;
+      state.me = { id: newS.id, name: newS.name, role: 'student', classroomId: foundClassroom.id };
+      await sSet('my-profile', state.me, false);
+      startSessionTimer();
+      render();
+    };
+  }
+  document.getElementById('teacherEnter').onclick = async ()=>{
+    state.me = { id: 'teacher', name: 'Teacher', role: 'teacher' };
+    await sSet('my-profile', state.me, false);
+    state.viewingClassroomId = state.classrooms[0] ? state.classrooms[0].id : null;
+    if(state.viewingClassroomId) await loadRosterForClassroom(state.viewingClassroomId);
+    render();
+  };
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div'); d.innerText = str; return d.innerHTML;
+}
+
+/* ================= Major scale transposition engine =================
+   Built algorithmically (not from memory of individual scales), so every
+   scale is generated the same way real key signatures work: intervals in
+   semitones, spelled using the next letter name each time. */
+const LETTERS = ['C','D','E','F','G','A','B'];
+const NATURAL_SEMITONES = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+const MAJOR_INTERVALS = [0,2,4,5,7,9,11];
+
+function parseTonic(t){
+  const letter = t[0];
+  let semitone = NATURAL_SEMITONES[letter];
+  for(const c of t.slice(1)){ if(c==='#') semitone++; if(c==='b') semitone--; }
+  semitone = ((semitone % 12) + 12) % 12;
+  return { letterIdx: LETTERS.indexOf(letter), semitone };
+}
+function spellNote(letterIdx, targetSemitone){
+  const letter = LETTERS[((letterIdx % 7) + 7) % 7];
+  const natural = NATURAL_SEMITONES[letter];
+  let diff = ((targetSemitone - natural) % 12 + 12) % 12;
+  if(diff > 6) diff -= 12;
+  let acc = '';
+  if(diff === 1) acc = '#'; else if(diff === 2) acc = '##';
+  else if(diff === -1) acc = 'b'; else if(diff === -2) acc = 'bb';
+  return letter + acc;
+}
+function buildMajorScale(tonicStr){
+  const { letterIdx, semitone } = parseTonic(tonicStr);
+  const notes = MAJOR_INTERVALS.map((iv,i)=> spellNote(letterIdx+i, (semitone+iv)%12));
+  notes.push(notes[0]);
+  return notes;
+}
+function transposeTonic(tonicStr, semitoneShift, letterShift){
+  const { letterIdx, semitone } = parseTonic(tonicStr);
+  return spellNote(letterIdx + letterShift, ((semitone + semitoneShift) % 12 + 12) % 12);
+}
+function prettyAcc(note){ return note.replace(/#/g,'♯').replace(/b/g,'♭'); }
+// Preferred single-accidental spelling for each pitch class, used as a fallback
+// when a transposed tonic would otherwise force a double sharp/flat (like F##) —
+// real key signatures cap out at 7 accidentals, and no band chart writes doubles.
+const PREFERRED_SPELLING = ['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+function buildMajorScaleSafe(tonicStr){
+  let notes = buildMajorScale(tonicStr);
+  let tonic = tonicStr;
+  if(notes.some(n => n.length >= 3)){ // a "##" or "bb" shows up as a 3+ char note
+    const { semitone } = parseTonic(tonicStr);
+    tonic = PREFERRED_SPELLING[semitone];
+    notes = buildMajorScale(tonic);
+  }
+  return { notes, tonic };
+}
+
+const CONCERT_SCALES = [
+  { name: 'Concert C',  tonic: 'C'  },
+  { name: 'Concert F',  tonic: 'F'  },
+  { name: 'Concert B♭', tonic: 'Bb' },
+  { name: 'Concert E♭', tonic: 'Eb' },
+  { name: 'Concert A♭', tonic: 'Ab' },
+  { name: 'Concert D♭', tonic: 'Db' },
+  { name: 'Concert F♯', tonic: 'F#' },
+  { name: 'Concert B',  tonic: 'B'  },
+  { name: 'Concert E',  tonic: 'E'  },
+  { name: 'Concert A',  tonic: 'A'  },
+  { name: 'Concert D',  tonic: 'D'  },
+  { name: 'Concert G',  tonic: 'G'  },
+];
+// shift = semitones to add to the concert tonic; letterShift = letter-names to move, to get the written tonic.
+const INSTRUMENTS = [
+  { key:'flute',      name:'Flute',                              shift:0, letterShift:0 },
+  { key:'oboe',       name:'Oboe',                                shift:0, letterShift:0 },
+  { key:'bassoon',    name:'Bassoon',                             shift:0, letterShift:0 },
+  { key:'clarinet',   name:'Clarinet (B♭)',                       shift:2, letterShift:1 },
+  { key:'bassclarinet', name:'Bass Clarinet (B♭)',                shift:2, letterShift:1 },
+  { key:'altosax',    name:'Alto Saxophone (E♭)',                 shift:9, letterShift:5 },
+  { key:'tenorsax',   name:'Tenor Saxophone (B♭)',                shift:2, letterShift:1 },
+  { key:'barisax',    name:'Baritone Saxophone (E♭)',             shift:9, letterShift:5 },
+  { key:'trumpet',    name:'Trumpet / Cornet (B♭)',               shift:2, letterShift:1 },
+  { key:'horn',       name:'French Horn (F)',                     shift:7, letterShift:4 },
+  { key:'trombone',   name:'Trombone',                            shift:0, letterShift:0 },
+  { key:'euphonium',  name:'Euphonium / Baritone (bass clef)',    shift:0, letterShift:0 },
+  { key:'tuba',       name:'Tuba',                                shift:0, letterShift:0 },
+];
+
+async function renderScales(container){
+  if(!state.scalesInstrument) state.scalesInstrument = 'flute';
+  container.innerHTML = `
+    <div class="card">
+      <h2>Major Scales</h2>
+      <p class="hint">All 12 major scales, transposed for your instrument.</p>
+      <p class="hint" style="margin-top:-12px;"><span class="scale-note tonic" style="padding:2px 8px;">1</span> tonic &nbsp; <span class="scale-note arpeggio" style="padding:2px 8px;">3/5</span> arpeggio notes</p>
+      <div class="instrument-picker">
+        <select id="scaleInstrument">
+          ${INSTRUMENTS.map(i=>`<option value="${i.key}" ${i.key===state.scalesInstrument?'selected':''}>${i.name}</option>`).join('')}
+        </select>
+      </div>
+      <div id="scaleList"></div>
+    </div>
+  `;
+  document.getElementById('scaleInstrument').onchange = (e)=>{
+    state.scalesInstrument = e.target.value;
+    renderScales(container);
+  };
+  const instrument = INSTRUMENTS.find(i=>i.key===state.scalesInstrument);
+  const listEl = document.getElementById('scaleList');
+  listEl.innerHTML = CONCERT_SCALES.map(cs=>{
+    const rawWrittenTonic = instrument.shift===0 ? cs.tonic : transposeTonic(cs.tonic, instrument.shift, instrument.letterShift);
+    const { notes: scaleNotes, tonic: writtenTonic } = buildMajorScaleSafe(rawWrittenTonic);
+    const isConcertPitch = instrument.shift === 0;
+    return `
+      <div class="scale-card">
+        <div class="concert-name">${cs.name}${isConcertPitch ? '' : ` <span style="font-weight:600;">(written ${prettyAcc(writtenTonic)} major)</span>`}</div>
+        <div class="written-name">${prettyAcc(writtenTonic)} Major</div>
+        <div class="scale-notes">
+          ${scaleNotes.map((n,i)=>{
+            const cls = (i===0||i===scaleNotes.length-1) ? 'tonic' : (i===2||i===4) ? 'arpeggio' : '';
+            return `<span class="scale-note ${cls}">${prettyAcc(n)}</span>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ================= Fingering Resources =================
+   After repeated mistakes trying to build fingering charts from
+   memory (brass fingerings genuinely change by register in ways
+   that are easy to get subtly wrong), this tab links to established,
+   reputable outside resources instead of reproducing charts here. */
+const FINGERING_RESOURCES = [
+  {
+    title: 'Woodwinds',
+    subtitle: 'Flute, Oboe, Clarinet, Bass Clarinet, Alto/Tenor/Bari Sax, Bassoon',
+    link: { label: 'The Woodwind Fingering Guide — wfg.woodwind.org', url: 'https://www.wfg.woodwind.org/' },
+    note: "A long-standing, well-regarded community reference covering every standard woodwind, including alternate fingerings."
+  },
+  {
+    title: 'Brass',
+    subtitle: 'Trumpet, French Horn, Trombone, Euphonium, Tuba',
+    link: null,
+    note: "I wasn't able to find one clean, reliable, ad-free site I'd feel good recommending here — brass fingering pages online are mostly SEO content mills recycling the same chart, sometimes with errors. Your best bet is the fingering chart printed in the back of your band method book (Standard of Excellence, Essential Elements, etc.) — it's written and proofed by the publisher specifically for that instrument."
+  }
+];
+
+async function renderFingerings(container){
+  container.innerHTML = `
+    <div class="card">
+      <h2>Fingering Resources</h2>
+      <p class="hint">Rather than reproduce fingering charts here — a place I kept getting subtle details wrong — this points to solid outside references.</p>
+      ${FINGERING_RESOURCES.map(r => `
+        <div class="scale-card">
+          <div class="written-name" style="margin-bottom:2px;">${r.title}</div>
+          <div style="font-size:12px;color:var(--ink-soft);font-weight:700;margin-bottom:10px;">${r.subtitle}</div>
+          ${r.link ? `<a href="${r.link.url}" target="_blank" rel="noopener" class="btn" style="display:inline-block;margin-bottom:8px;">${r.link.label}</a>` : ''}
+          <p style="font-size:13px;color:var(--ink-soft);font-weight:600;line-height:1.5;">${r.note}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+
+/* ================= Streak logic ================= */
+function toDateStr(d){ return d.toISOString().slice(0,10); }
+
+
+function computeStreak(entries){
+  const dates = new Set(entries.map(e=>e.date));
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayStr = toDateStr(today);
+  const practicedToday = dates.has(todayStr);
+
+  let cursor = new Date(today);
+  if(!practicedToday) cursor.setDate(cursor.getDate()-1);
+  let current = 0;
+  while(dates.has(toDateStr(cursor))){
+    current++;
+    cursor.setDate(cursor.getDate()-1);
+  }
+
+  const sorted = Array.from(dates).sort();
+  let best = 0, run = 0, prev = null;
+  for(const ds of sorted){
+    if(prev){
+      const prevDate = new Date(prev); prevDate.setDate(prevDate.getDate()+1);
+      if(toDateStr(prevDate) === ds) run++; else run = 1;
+    } else run = 1;
+    best = Math.max(best, run);
+    prev = ds;
+  }
+  return { current, best, practicedToday, dates };
+}
+
+function weekStrip(dates){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const labels = ['S','M','T','W','T','F','S'];
+  let html = '';
+  for(let i=6;i>=0;i--){
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    const ds = toDateStr(d);
+    const done = dates.has(ds);
+    const isToday = i===0;
+    html += `<div class="week-dot ${done?'done':''} ${isToday?'today':''}">${done ? '✓' : labels[d.getDay()]}</div>`;
+  }
+  return html;
+}
+
+function streakMood(current){
+  if(current >= 3) return 'excited';
+  if(current >= 1) return 'happy';
+  return 'calm';
+}
+
+/* ================= Main app shell ================= */
+async function renderMain(){
+  const isTeacher = state.me.role === 'teacher';
+  let streakPill = '';
+  let classroomNote = '';
+  if(!isTeacher){
+    const entries = (await sGet('practice:' + state.me.id, true)) || [];
+    const st = computeStreak(entries);
+    if(st.current > 0) streakPill = `<span class="streak-pill">🔥 ${st.current}</span>`;
+    const myClass = state.classrooms.find(c=>c.id===state.me.classroomId);
+    if(myClass) classroomNote = ` · ${escapeHtml(myClass.name)}`;
+  }
+  el.innerHTML = `
+    <div class="app-header">
+      <div class="app-title-row">
+        <h1 class="app-title">The <span>Practice</span> Room</h1>
+      </div>
+      <div class="who">
+        Signed in as <b>${escapeHtml(state.me.name)}</b>${isTeacher ? ' (teacher)' : classroomNote}${streakPill}<br>
+        <button class="switch-link" id="switchUser">Not you? Switch</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab" data-tab="metronome">Metronome</button>
+      <button class="tab" data-tab="tuner">Tuner</button>
+      <button class="tab" data-tab="log">Practice Log</button>
+      <button class="tab" data-tab="assign">Assignments</button>
+      <button class="tab" data-tab="scales">Scales</button>
+      <button class="tab" data-tab="fingerings">Fingerings</button>
+      <button class="tab" data-tab="ask">Ask &amp; Share</button>
+    </div>
+    ${isTeacher ? `<div id="classroomBar">${classroomBarHTML()}</div>` : ''}
+    <div id="panels"></div>
+    <div class="footnote">${isTeacher ? 'Anyone with a class code or invite link can join that class — there\'s no password, so keep codes within your studio.' : 'Shared with everyone in your class — there\'s no password, so keep your class code within your studio.'}</div>
+  `;
+  document.getElementById('switchUser').onclick = async ()=>{
+    stopMetronome(); stopTuner(); stopDrone(); stopRecording();
+    await autoSaveAndResetTimer();
+    state.me = null;
+    await sSet('my-profile', null, false);
+    render();
+  };
+  el.querySelectorAll('.tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
+    btn.onclick = ()=>{
+      if(state.activeTab==='tuner' && btn.dataset.tab!=='tuner'){ stopTuner(); stopDrone(); }
+      if(state.activeTab==='metronome' && btn.dataset.tab!=='metronome') stopMetronome();
+      if(state.activeTab==='ask' && btn.dataset.tab!=='ask') stopRecording();
+      state.activeTab = btn.dataset.tab; renderMain();
+    };
+  });
+  if(isTeacher) wireClassroomBar();
+  renderPanel();
+}
+
+function classroomBarHTML(){
+  if(!state.classrooms.length){
+    return `<div class="card" style="text-align:center;">
+      <p class="hint" style="margin-bottom:12px;">You don't have any classes yet — create one to get a code your students can join with.</p>
+      <button class="btn" id="createFirstClass">Create your first class</button>
+    </div>`;
+  }
+  const current = state.classrooms.find(c=>c.id===state.viewingClassroomId) || state.classrooms[0];
+  return `
+    <div class="card" style="padding:16px 20px;">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
+        <select id="classroomSelect" style="padding:8px 10px;border-radius:10px;border:2px solid var(--line);font-weight:800;font-size:14px;">
+          ${state.classrooms.map(c=>`<option value="${c.id}" ${c.id===current.id?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}
+        </select>
+        <button class="switch-link" id="newClassBtn" style="font-size:12px;">+ New class</button>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--ink-soft);font-weight:700;">
+        Code: <b style="color:var(--ink);letter-spacing:1px;">${current.code}</b>
+        &nbsp;·&nbsp;<button class="switch-link" id="copyClassLink" style="font-size:12px;">Copy invite link</button>
+      </div>
+    </div>
+  `;
+}
+function wireClassroomBar(){
+  if(!state.classrooms.length){
+    document.getElementById('createFirstClass').onclick = createNewClassroom;
+    return;
+  }
+  document.getElementById('classroomSelect').onchange = async (e)=>{
+    state.viewingClassroomId = e.target.value;
+    state.viewingStudentId = null;
+    await loadRosterForClassroom(state.viewingClassroomId);
+    renderMain();
+  };
+  document.getElementById('newClassBtn').onclick = createNewClassroom;
+  document.getElementById('copyClassLink').onclick = ()=>{
+    const current = state.classrooms.find(c=>c.id===state.viewingClassroomId) || state.classrooms[0];
+    const link = location.origin + location.pathname + '?class=' + current.code;
+    const btn = document.getElementById('copyClassLink');
+    const done = ()=>{ if(btn){ const old='Copy invite link'; btn.textContent='Copied!'; setTimeout(()=>{ if(document.getElementById('copyClassLink')) document.getElementById('copyClassLink').textContent = old; }, 1500); } };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(done).catch(()=> alert('Invite link: ' + link));
+    } else {
+      alert('Invite link: ' + link);
+    }
+  };
+}
+
+function renderPanel(){
+  const panels = document.getElementById('panels');
+  if(state.activeTab === 'metronome') renderMetronome(panels);
+  else if(state.activeTab === 'tuner') renderTuner(panels);
+  else if(state.activeTab === 'log') renderLog(panels);
+  else if(state.activeTab === 'assign') renderAssignments(panels);
+  else if(state.activeTab === 'scales') renderScales(panels);
+  else if(state.activeTab === 'fingerings') renderFingerings(panels);
+  else if(state.activeTab === 'ask') renderAskShare(panels);
+}
+
+/* ================================================================
+   METRONOME
+   ================================================================ */
+let metro = {
+  playing: false, bpm: 100, beatsPerMeasure: 4, subdivision: 1, subBeatCounter: 0,
+  audioCtx: null, nextNoteTime: 0, timerId: null, tapTimes: []
+};
+const lookahead = 25.0, scheduleAheadTime = 0.1;
+const SUBDIVISIONS = [ {n:1, label:'None'}, {n:2, label:'8ths'}, {n:3, label:'Triplets'}, {n:4, label:'16ths'} ];
+
+function renderMetronome(container){
+  container.innerHTML = `
+    <div class="card">
+      <h2>Metronome</h2>
+      <p class="hint">Tap a tempo, pick a time signature, and go.</p>
+      <div class="metro-wrap">
+        <div class="pendulum-box">
+          <div class="pendulum-arm" id="pendArm"><div class="pendulum-bob"></div></div>
+        </div>
+        <div class="metro-controls">
+          <div class="bpm-row">
+            <span class="bpm-num display" id="bpmNum">${metro.bpm}</span>
+            <span class="bpm-label">BPM</span>
+          </div>
+          <input type="range" id="bpmSlider" min="40" max="208" value="${metro.bpm}">
+          <div class="bpm-btnrow">
+            <button id="bpmMinus5">−5</button>
+            <button id="bpmMinus1">−1</button>
+            <button id="bpmPlus1">+1</button>
+            <button id="bpmPlus5">+5</button>
+            <button id="tapTempo">Tap tempo</button>
+          </div>
+          <div class="meter-select" id="meterSelect">
+            ${[2,3,4,6].map(n=>`<button data-n="${n}" class="${n===metro.beatsPerMeasure?'active':''}">${n}/4</button>`).join('')}
+          </div>
+          <p class="bpm-label" style="margin-bottom:6px;">Subdivide each beat:</p>
+          <div class="meter-select" id="subdivSelect">
+            ${SUBDIVISIONS.map(s=>`<button data-n="${s.n}" class="${s.n===metro.subdivision?'active':''}">${s.label}</button>`).join('')}
+          </div>
+          <div class="beat-dots" id="beatDots">
+            ${Array.from({length: metro.beatsPerMeasure}).map((_,i)=>`<div class="beat-dot ${i===0?'accent':''}"></div>`).join('')}
+          </div>
+          <button class="btn play-btn" id="metroToggle">${metro.playing? 'Stop' : 'Start'}</button>
+        </div>
+      </div>
+    </div>
+  `;
+  const bpmNum = document.getElementById('bpmNum');
+  const slider = document.getElementById('bpmSlider');
+  const setBpm = (v)=>{
+    metro.bpm = Math.max(40, Math.min(208, v));
+    bpmNum.textContent = metro.bpm;
+    slider.value = metro.bpm;
+  };
+  slider.oninput = (e)=> setBpm(parseInt(e.target.value,10));
+  document.getElementById('bpmMinus5').onclick = ()=> setBpm(metro.bpm-5);
+  document.getElementById('bpmMinus1').onclick = ()=> setBpm(metro.bpm-1);
+  document.getElementById('bpmPlus1').onclick = ()=> setBpm(metro.bpm+1);
+  document.getElementById('bpmPlus5').onclick = ()=> setBpm(metro.bpm+5);
+
+  document.getElementById('tapTempo').onclick = ()=>{
+    const now = performance.now();
+    metro.tapTimes = metro.tapTimes.filter(t => now - t < 2200);
+    metro.tapTimes.push(now);
+    if(metro.tapTimes.length >= 2){
+      const intervals = [];
+      for(let i=1;i<metro.tapTimes.length;i++) intervals.push(metro.tapTimes[i]-metro.tapTimes[i-1]);
+      const avg = intervals.reduce((a,b)=>a+b,0)/intervals.length;
+      setBpm(Math.round(60000/avg));
+    }
+  };
+
+  container.querySelectorAll('#meterSelect button').forEach(btn=>{
+    btn.onclick = ()=>{
+      metro.beatsPerMeasure = parseInt(btn.dataset.n,10);
+      metro.subBeatCounter = 0;
+      renderMetronome(container);
+    };
+  });
+  container.querySelectorAll('#subdivSelect button').forEach(btn=>{
+    btn.onclick = ()=>{
+      metro.subdivision = parseInt(btn.dataset.n,10);
+      metro.subBeatCounter = 0;
+      renderMetronome(container);
+    };
+  });
+
+  document.getElementById('metroToggle').onclick = ()=>{
+    if(metro.playing) stopMetronome(); else startMetronome();
+    renderMetronome(container);
+  };
+
+  animatePendulum();
+}
+
+function startMetronome(){
+  if(!metro.audioCtx) metro.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(metro.audioCtx.state === 'suspended') metro.audioCtx.resume();
+  metro.playing = true;
+  metro.subBeatCounter = 0;
+  metro.nextNoteTime = metro.audioCtx.currentTime + 0.05;
+  scheduler();
+}
+function stopMetronome(){
+  metro.playing = false;
+  if(metro.timerId) clearTimeout(metro.timerId);
+}
+function scheduler(){
+  if(!metro.playing) return;
+  while(metro.nextNoteTime < metro.audioCtx.currentTime + scheduleAheadTime){
+    const beatNumber = Math.floor(metro.subBeatCounter / metro.subdivision) % metro.beatsPerMeasure;
+    const subIndex = metro.subBeatCounter % metro.subdivision;
+    scheduleClick(beatNumber, subIndex, metro.nextNoteTime);
+    const secondsPerBeat = 60.0 / metro.bpm;
+    metro.nextNoteTime += secondsPerBeat / metro.subdivision;
+    metro.subBeatCounter = (metro.subBeatCounter + 1) % (metro.beatsPerMeasure * metro.subdivision);
+  }
+  metro.timerId = setTimeout(scheduler, lookahead);
+}
+function scheduleClick(beatNumber, subIndex, time){
+  const osc = metro.audioCtx.createOscillator();
+  const gain = metro.audioCtx.createGain();
+  osc.connect(gain); gain.connect(metro.audioCtx.destination);
+  const isMainBeat = subIndex === 0;
+  const accent = beatNumber === 0 && isMainBeat;
+  osc.frequency.value = accent ? 1500 : (isMainBeat ? 1000 : 700);
+  const peak = accent ? 0.5 : (isMainBeat ? 0.3 : 0.14);
+  gain.gain.setValueAtTime(peak, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+  osc.start(time); osc.stop(time + 0.05);
+  if(isMainBeat){
+    const delayMs = (time - metro.audioCtx.currentTime) * 1000;
+    setTimeout(()=> flashBeat(beatNumber), Math.max(0, delayMs));
+  }
+}
+function flashBeat(beatNumber){
+  const dots = document.querySelectorAll('#beatDots .beat-dot');
+  dots.forEach(d=>d.classList.remove('on'));
+  if(dots[beatNumber]) dots[beatNumber].classList.add('on');
+  setTimeout(()=>{ if(dots[beatNumber]) dots[beatNumber].classList.remove('on'); }, 120);
+}
+function animatePendulum(){
+  const arm = document.getElementById('pendArm');
+  if(!arm) return;
+  let dir = 1;
+  function step(){
+    if(!document.getElementById('pendArm')) return;
+    const arm2 = document.getElementById('pendArm');
+    if(metro.playing){
+      const secondsPerBeat = 60.0/metro.bpm;
+      arm2.style.transition = `transform ${secondsPerBeat}s linear`;
+      dir *= -1;
+      arm2.style.transform = `rotate(${dir*18}deg)`;
+      setTimeout(step, secondsPerBeat*1000);
+    } else {
+      arm2.style.transition = `transform 0.4s ease`;
+      arm2.style.transform = `rotate(-18deg)`;
+    }
+  }
+  step();
+}
+
+/* ================================================================
+   TUNER
+   ================================================================ */
+let tuner = { active: false, audioCtx: null, analyser: null, stream: null, raf: null };
+const noteStrings = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+let drone = { active: false, audioCtx: null, osc: null, gain: null, note: 'Bb', octave: 4 };
+function droneFrequency(noteStr, octave){
+  const { semitone } = parseTonic(noteStr);
+  const midi = (octave + 1) * 12 + semitone;
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+function startDrone(){
+  if(!drone.audioCtx) drone.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(drone.audioCtx.state === 'suspended') drone.audioCtx.resume();
+  const freq = droneFrequency(drone.note, drone.octave);
+  drone.osc = drone.audioCtx.createOscillator();
+  drone.osc.type = 'sine';
+  drone.osc.frequency.value = freq;
+  drone.gain = drone.audioCtx.createGain();
+  drone.gain.gain.setValueAtTime(0, drone.audioCtx.currentTime);
+  drone.gain.gain.linearRampToValueAtTime(0.22, drone.audioCtx.currentTime + 0.15);
+  drone.osc.connect(drone.gain);
+  drone.gain.connect(drone.audioCtx.destination);
+  drone.osc.start();
+  drone.active = true;
+}
+function stopDrone(){
+  if(drone.active && drone.osc && drone.gain && drone.audioCtx){
+    const now = drone.audioCtx.currentTime;
+    drone.gain.gain.cancelScheduledValues(now);
+    drone.gain.gain.setValueAtTime(drone.gain.gain.value, now);
+    drone.gain.gain.linearRampToValueAtTime(0, now + 0.12);
+    drone.osc.stop(now + 0.15);
+  }
+  drone.active = false;
+  drone.osc = null; drone.gain = null;
+}
+function updateDronePitchLive(){
+  if(drone.active && drone.osc){ drone.osc.frequency.setValueAtTime(droneFrequency(drone.note, drone.octave), drone.audioCtx.currentTime); }
+}
+
+function renderTuner(container){
+  container.innerHTML = `
+    <div class="card">
+      <h2>Tuner</h2>
+      <p class="hint">Play a single sustained note near your microphone.</p>
+      <div class="tuner-body">
+        <div class="tuner-note display" id="tunerNote">${tuner.active ? '—' : '—'}</div>
+        <div class="tuner-freq" id="tunerFreq">${tuner.active ? 'Listening…' : 'Microphone off'}</div>
+        <div class="tuner-meter">
+          <div class="tuner-center-line"></div>
+          <div class="tuner-needle" id="tunerNeedle" style="left:50%"></div>
+        </div>
+        <div class="tuner-status" id="tunerStatus"></div>
+        <button class="btn" id="tunerToggle">${tuner.active ? 'Stop tuner' : 'Start tuner'}</button>
+        <p class="mic-note">Uses your microphone only while this tab is open. Nothing is recorded.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Drone</h2>
+      <p class="hint">Play a steady reference pitch to tune against by ear.</p>
+      <div style="display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+        <select id="droneNote" style="padding:9px 12px;border-radius:12px;border:2px solid var(--line);font-size:14px;font-weight:700;">
+          ${PREFERRED_SPELLING.map(n=>`<option value="${n}" ${n===drone.note?'selected':''}>${prettyAcc(n)}</option>`).join('')}
+        </select>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button id="droneOctDown" style="background:var(--bg2);border:none;color:var(--ink);padding:7px 13px;border-radius:10px;font-size:13px;font-weight:800;">−</button>
+          <span style="font-weight:800;font-size:13px;min-width:64px;text-align:center;">Octave ${drone.octave}</span>
+          <button id="droneOctUp" style="background:var(--bg2);border:none;color:var(--ink);padding:7px 13px;border-radius:10px;font-size:13px;font-weight:800;">+</button>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn ${drone.active?'btn-ghost':''}" id="droneToggle">${drone.active ? 'Stop drone' : 'Play drone'}</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('tunerToggle').onclick = async ()=>{
+    if(tuner.active){ stopTuner(); renderTuner(container); }
+    else{
+      const result = await startTuner();
+      renderTuner(container);
+      if(result !== 'ok'){
+        const msgs = {
+          insecure: "This page needs to be loaded over https for microphone access to work — try the published link rather than a local copy.",
+          unsupported: "This browser can't offer microphone access here. Try opening this page directly in Safari or Chrome (not inside another app's built-in browser).",
+          denied: "Microphone access was blocked or previously denied. Check your device's Settings → [Browser] → Microphone (or the site permissions icon in the address bar) and allow access, then try again.",
+          error: "Could not access the microphone — check your browser permissions and try again."
+        };
+        document.getElementById('tunerStatus').textContent = msgs[result] || msgs.error;
+      }
+    }
+  };
+  document.getElementById('droneNote').onchange = (e)=>{
+    drone.note = e.target.value;
+    updateDronePitchLive();
+  };
+  document.getElementById('droneOctDown').onclick = ()=>{
+    drone.octave = Math.max(2, drone.octave - 1);
+    updateDronePitchLive();
+    renderTuner(container);
+  };
+  document.getElementById('droneOctUp').onclick = ()=>{
+    drone.octave = Math.min(6, drone.octave + 1);
+    updateDronePitchLive();
+    renderTuner(container);
+  };
+  document.getElementById('droneToggle').onclick = ()=>{
+    if(drone.active) stopDrone(); else startDrone();
+    renderTuner(container);
+  };
+}
+
+async function startTuner(){
+  if(!window.isSecureContext){ return 'insecure'; }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ return 'unsupported'; }
+  try{
+    tuner.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  }catch(e){
+    return (e && e.name === 'NotAllowedError') ? 'denied' : 'error';
+  }
+  tuner.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = tuner.audioCtx.createMediaStreamSource(tuner.stream);
+  tuner.analyser = tuner.audioCtx.createAnalyser();
+  tuner.analyser.fftSize = 2048;
+  source.connect(tuner.analyser);
+  tuner.active = true;
+  tunerLoop();
+  return 'ok';
+}
+function stopTuner(){
+  tuner.active = false;
+  if(tuner.raf) cancelAnimationFrame(tuner.raf);
+  if(tuner.stream) tuner.stream.getTracks().forEach(t=>t.stop());
+  if(tuner.audioCtx) tuner.audioCtx.close();
+  tuner.audioCtx = null; tuner.stream = null; tuner.analyser = null;
+}
+
+/* ================================================================
+   ASK & SHARE — students send a note and/or a short voice recording
+   to their teacher; teacher sees an inbox scoped to the classroom.
+   ================================================================ */
+let recorder = { active:false, mediaRecorder:null, chunks:[], stream:null, audioDataUrl:null, startedAt:null, tickId:null };
+const MAX_RECORD_SECONDS = 60;
+
+async function startRecording(onTick){
+  if(!window.isSecureContext) return 'insecure';
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined') return 'unsupported';
+  try{
+    recorder.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  }catch(e){
+    return (e && e.name === 'NotAllowedError') ? 'denied' : 'error';
+  }
+  const preferred = ['audio/webm', 'audio/mp4', 'audio/ogg'];
+  const mimeType = preferred.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
+  recorder.mediaRecorder = mimeType ? new MediaRecorder(recorder.stream, { mimeType }) : new MediaRecorder(recorder.stream);
+  recorder.chunks = [];
+  recorder.audioDataUrl = null;
+  recorder.mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recorder.chunks.push(e.data); };
+  recorder.mediaRecorder.start();
+  recorder.active = true;
+  recorder.startedAt = Date.now();
+  recorder.tickId = setInterval(()=>{
+    const sec = Math.floor((Date.now() - recorder.startedAt)/1000);
+    if(onTick) onTick(sec);
+    if(sec >= MAX_RECORD_SECONDS) stopRecording();
+  }, 250);
+  return 'ok';
+}
+function stopRecording(){
+  return new Promise((resolve)=>{
+    if(!recorder.active || !recorder.mediaRecorder){ resolve(null); return; }
+    clearInterval(recorder.tickId);
+    recorder.mediaRecorder.onstop = async ()=>{
+      const blob = new Blob(recorder.chunks, { type: recorder.mediaRecorder.mimeType || 'audio/webm' });
+      recorder.audioDataUrl = await blobToDataURL(blob);
+      if(recorder.stream) recorder.stream.getTracks().forEach(t=>t.stop());
+      recorder.active = false;
+      resolve(recorder.audioDataUrl);
+    };
+    recorder.mediaRecorder.stop();
+  });
+}
+function blobToDataURL(blob){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onloadend = ()=> resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+function discardRecording(){
+  recorder.audioDataUrl = null;
+  recorder.chunks = [];
+}
+
+async function loadHelpIndex(classroomId){
+  return (await sGet('helpindex:' + classroomId, true)) || [];
+}
+async function submitHelpMessage(classroomId, entry){
+  const index = await loadHelpIndex(classroomId);
+  index.push(entry);
+  await sSet('helpindex:' + classroomId, index, true);
+}
+async function updateHelpMessage(classroomId, messageId, changes){
+  const index = await loadHelpIndex(classroomId);
+  const item = index.find(m=>m.id===messageId);
+  if(item) Object.assign(item, changes);
+  await sSet('helpindex:' + classroomId, index, true);
+}
+async function deleteHelpMessage(classroomId, messageId){
+  const index = (await loadHelpIndex(classroomId)).filter(m=>m.id !== messageId);
+  await sSet('helpindex:' + classroomId, index, true);
+}
+
+async function renderAskShare(container){
+  if(state.me.role === 'teacher') await renderAskShareTeacher(container);
+  else await renderAskShareStudent(container);
+}
+
+async function renderAskShareStudent(container){
+  const classroomId = state.me.classroomId;
+  let selectedType = 'help';
+  container.innerHTML = `
+    <div class="card">
+      <h2>Ask &amp; Share</h2>
+      <p class="hint">Stuck on something, or proud of how a section is going? Send it to your teacher.</p>
+      <div class="ask-type-row" id="askTypeRow">
+        <button class="ask-type-btn help selected" data-type="help">🙋 I need help</button>
+        <button class="ask-type-btn showoff" data-type="showoff">🌟 Check this out!</button>
+      </div>
+      <textarea id="askText" rows="3" placeholder="What's going on?" style="width:100%;box-sizing:border-box;padding:10px 12px;border:2px solid var(--line);border-radius:12px;font-size:14px;font-weight:600;margin-bottom:6px;font-family:inherit;"></textarea>
+      <div class="record-row">
+        <button class="record-btn" id="recordBtn"><span class="record-dot"></span> Record audio (optional)</button>
+      </div>
+      <div id="recordPreview"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <button class="btn" id="submitAsk">Send to teacher</button>
+      </div>
+      <p id="askStatus" style="text-align:center;font-size:12px;color:var(--ink-soft);font-weight:700;margin-top:8px;"></p>
+    </div>
+    <div class="card">
+      <h2>Your submissions</h2>
+      <div id="mySubmissions">Loading…</div>
+    </div>
+  `;
+  container.querySelectorAll('.ask-type-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      selectedType = btn.dataset.type;
+      container.querySelectorAll('.ask-type-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+  });
+  function renderRecordPreview(){
+    const p = document.getElementById('recordPreview');
+    if(!p) return;
+    if(recorder.audioDataUrl){
+      p.innerHTML = `<audio controls src="${recorder.audioDataUrl}"></audio><div style="text-align:center;margin-top:6px;"><button class="switch-link" id="removeRecording">Remove recording</button></div>`;
+      document.getElementById('removeRecording').onclick = ()=>{ discardRecording(); renderRecordPreview(); };
+    } else {
+      p.innerHTML = '';
+    }
+  }
+  document.getElementById('recordBtn').onclick = async ()=>{
+    const btn = document.getElementById('recordBtn');
+    if(!recorder.active){
+      btn.innerHTML = 'Starting…';
+      const result = await startRecording((sec)=>{
+        const b = document.getElementById('recordBtn');
+        if(b) b.innerHTML = `<span class="record-dot pulse"></span> Recording… ${sec}s (tap to stop)`;
+      });
+      if(result === 'ok'){
+        btn.classList.add('recording');
+      } else {
+        const msgs = {
+          insecure: "Recording needs a secure (https) page — try the deployed link.",
+          unsupported: "This browser can't record audio here.",
+          denied: "Microphone access was blocked — check your browser or site permissions.",
+          error: "Couldn't start recording — check microphone permissions and try again."
+        };
+        document.getElementById('askStatus').textContent = msgs[result] || msgs.error;
+        btn.innerHTML = '<span class="record-dot"></span> Record audio (optional)';
+      }
+    } else {
+      btn.innerHTML = 'Saving…';
+      await stopRecording();
+      btn.classList.remove('recording');
+      btn.innerHTML = '<span class="record-dot"></span> Record audio (optional)';
+      renderRecordPreview();
+    }
+  };
+  async function loadMySubmissions(){
+    const index = await loadHelpIndex(classroomId);
+    const mine = index.filter(m=>m.studentId===state.me.id).slice().reverse();
+    const listEl = document.getElementById('mySubmissions');
+    if(!listEl) return;
+    if(mine.length===0){ listEl.innerHTML = '<p class="log-empty">Nothing sent yet.</p>'; return; }
+    listEl.innerHTML = mine.map(m=>`
+      <div class="ask-msg-card">
+        <div class="ask-msg-head">
+          <span class="ask-badge ${m.type}">${m.type==='help'?'🙋 Help':'🌟 Showcase'}</span>
+          <span class="ask-msg-meta">${new Date(m.date).toLocaleDateString()}</span>
+          ${m.resolved ? '<span class="ask-resolved-pill">✓ Seen by teacher</span>' : ''}
+        </div>
+        <div class="ask-msg-text">${escapeHtml(m.text || '(recording only)')}</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('submitAsk').onclick = async ()=>{
+    const text = document.getElementById('askText').value.trim();
+    if(!text && !recorder.audioDataUrl){
+      document.getElementById('askStatus').textContent = 'Add a note or a recording first.';
+      return;
+    }
+    const entry = {
+      id: uid(), studentId: state.me.id, studentName: state.me.name,
+      mascot: (state.roster.find(s=>s.id===state.me.id)||{}).mascot || defaultMascot(),
+      type: selectedType, text, hasAudio: !!recorder.audioDataUrl,
+      date: new Date().toISOString(), resolved: false
+    };
+    document.getElementById('submitAsk').disabled = true;
+    await submitHelpMessage(classroomId, entry);
+    if(recorder.audioDataUrl) await sSet('helpaudio:' + entry.id, recorder.audioDataUrl, true);
+    discardRecording();
+    document.getElementById('askText').value = '';
+    renderRecordPreview();
+    document.getElementById('submitAsk').disabled = false;
+    document.getElementById('askStatus').textContent = 'Sent! Your teacher will see this.';
+    setTimeout(()=>{ const s=document.getElementById('askStatus'); if(s) s.textContent=''; }, 3000);
+    loadMySubmissions();
+  };
+  loadMySubmissions();
+}
+
+async function renderAskShareTeacher(container){
+  const classroomId = state.viewingClassroomId;
+  container.innerHTML = `
+    <div class="card">
+      <h2>Ask &amp; Share</h2>
+      <p class="hint">What your students have sent in for this class.</p>
+      <div id="teacherAskList">Loading…</div>
+    </div>
+  `;
+  if(!classroomId){
+    document.getElementById('teacherAskList').innerHTML = '<p class="log-empty">Create a class first.</p>';
+    return;
+  }
+  async function refresh(){
+    const index = (await loadHelpIndex(classroomId)).slice().reverse();
+    const listEl = document.getElementById('teacherAskList');
+    if(!listEl) return;
+    if(index.length===0){ listEl.innerHTML = '<p class="log-empty">Nothing submitted yet.</p>'; return; }
+    listEl.innerHTML = index.map(m=>`
+      <div class="ask-msg-card">
+        <div class="ask-msg-head">
+          <span class="ask-badge ${m.type}">${m.type==='help'?'🙋 Help':'🌟 Showcase'}</span>
+          <b>${escapeHtml(m.studentName)}</b>
+          <span class="ask-msg-meta">${new Date(m.date).toLocaleDateString()}</span>
+          ${m.resolved ? '<span class="ask-resolved-pill">✓ Resolved</span>' : ''}
+        </div>
+        <div class="ask-msg-text">${escapeHtml(m.text || '(recording only)')}</div>
+        ${m.hasAudio ? `<div id="audioSlot-${m.id}"><button class="btn btn-ghost" data-load-audio="${m.id}">▶ Load recording</button></div>` : ''}
+        <div style="display:flex;gap:14px;margin-top:8px;">
+          <button class="switch-link" data-resolve="${m.id}">${m.resolved ? 'Mark unresolved' : 'Mark resolved'}</button>
+          <button class="switch-link" data-delete="${m.id}">Delete</button>
+        </div>
+      </div>
+    `).join('');
+    listEl.querySelectorAll('[data-load-audio]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const id = btn.dataset.loadAudio;
+        btn.textContent = 'Loading…';
+        const audioDataUrl = await sGet('helpaudio:' + id, true);
+        const slot = document.getElementById('audioSlot-' + id);
+        if(slot && audioDataUrl) slot.innerHTML = `<audio controls autoplay src="${audioDataUrl}"></audio>`;
+      };
+    });
+    listEl.querySelectorAll('[data-resolve]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const id = btn.dataset.resolve;
+        const item = index.find(m=>m.id===id);
+        await updateHelpMessage(classroomId, id, { resolved: !item.resolved });
+        refresh();
+      };
+    });
+    listEl.querySelectorAll('[data-delete]').forEach(btn=>{
+      btn.onclick = async ()=>{
+        const id = btn.dataset.delete;
+        if(!confirm('Delete this submission?')) return;
+        await deleteHelpMessage(classroomId, id);
+        refresh();
+      };
+    });
+  }
+  refresh();
+}
+
+function tunerLoop(){
+  if(!tuner.active || !tuner.analyser) return;
+  const buf = new Float32Array(tuner.analyser.fftSize);
+  tuner.analyser.getFloatTimeDomainData(buf);
+  const freq = autoCorrelate(buf, tuner.audioCtx.sampleRate);
+  const noteEl = document.getElementById('tunerNote');
+  const freqEl = document.getElementById('tunerFreq');
+  const needle = document.getElementById('tunerNeedle');
+  const status = document.getElementById('tunerStatus');
+  if(freq !== -1 && noteEl){
+    const noteNum = 12 * (Math.log(freq/440)/Math.log(2)) + 69;
+    const rounded = Math.round(noteNum);
+    const name = noteStrings[(rounded+120)%12];
+    const octave = Math.floor(rounded/12) - 1;
+    const refFreq = 440 * Math.pow(2, (rounded-69)/12);
+    const cents = Math.floor(1200 * Math.log(freq/refFreq)/Math.log(2));
+    noteEl.textContent = name + octave;
+    freqEl.textContent = freq.toFixed(1) + ' Hz';
+    const clamped = Math.max(-50, Math.min(50, cents));
+    needle.style.left = (50 + clamped) + '%';
+    const inTune = Math.abs(cents) <= 5;
+    needle.classList.toggle('in-tune', inTune);
+    status.textContent = inTune ? 'In tune' : (cents > 0 ? 'Sharp — tune down a touch' : 'Flat — tune up a touch');
+  } else if(noteEl){
+    freqEl.textContent = 'Listening…';
+    status.textContent = '';
+  }
+  tuner.raf = requestAnimationFrame(tunerLoop);
+}
+// Standard autocorrelation pitch detector (ACF2+).
+function autoCorrelate(buffer, sampleRate){
+  const SIZE = buffer.length;
+  let rms = 0;
+  for(let i=0;i<SIZE;i++) rms += buffer[i]*buffer[i];
+  rms = Math.sqrt(rms/SIZE);
+  if(rms < 0.01) return -1;
+
+  let r1=0, r2=SIZE-1;
+  const thres = 0.2;
+  for(let i=0;i<SIZE/2;i++){ if(Math.abs(buffer[i])<thres){ r1=i; break; } }
+  for(let i=1;i<SIZE/2;i++){ if(Math.abs(buffer[SIZE-i])<thres){ r2=SIZE-i; break; } }
+  const trimmed = buffer.slice(r1, r2);
+  const n = trimmed.length;
+  if(n < 2) return -1;
+
+  const c = new Array(n).fill(0);
+  for(let i=0;i<n;i++){
+    for(let j=0;j<n-i;j++){
+      c[i] += trimmed[j]*trimmed[j+i];
+    }
+  }
+  let d=0; while(d < n-1 && c[d] > c[d+1]) d++;
+  let maxval=-1, maxpos=-1;
+  for(let i=d;i<n;i++){ if(c[i]>maxval){ maxval=c[i]; maxpos=i; } }
+  if(maxpos <= 0) return -1;
+  let T0 = maxpos;
+  const x1 = c[T0-1] || 0, x2 = c[T0] || 0, x3 = c[T0+1] || 0;
+  const a = (x1 + x3 - 2*x2)/2;
+  const b = (x3 - x1)/2;
+  if(a) T0 = T0 - b/(2*a);
+  if(T0 <= 0) return -1;
+  return sampleRate / T0;
+}
+
+/* ================================================================
+   PRACTICE LOG
+   ================================================================ */
+let logTimer = { running: false, startedAt: null, elapsedMs: 0, tickId: null };
+
+function startSessionTimer(){
+  if(logTimer.running) return;
+  logTimer.startedAt = Date.now();
+  logTimer.running = true;
+  logTimer.tickId = setInterval(()=>{
+    const d = document.getElementById('timerDisplay');
+    if(d) d.textContent = formatMs(logTimer.elapsedMs + (Date.now()-logTimer.startedAt));
+  }, 500);
+}
+function stopSessionTimerAccumulate(){
+  if(!logTimer.running) return;
+  clearInterval(logTimer.tickId);
+  logTimer.elapsedMs += Date.now() - logTimer.startedAt;
+  logTimer.running = false;
+}
+async function autoSaveAndResetTimer(){
+  if(!(state.me && state.me.role === 'student')) return;
+  if(!logTimer.running) return;
+  stopSessionTimerAccumulate();
+  const mins = Math.round(logTimer.elapsedMs/60000);
+  if(mins >= 1){
+    await addLogEntry(state.me.id, mins, '(auto-saved when the app closed)');
+  }
+  logTimer = { running:false, startedAt:null, elapsedMs:0, tickId:null };
+}
+// Best-effort autosave when the tab is closed, backgrounded, or navigated away from.
+document.addEventListener('pagehide', ()=>{ autoSaveAndResetTimer(); });
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) autoSaveAndResetTimer(); });
+
+function currentLogStudentId(){
+  if(state.me.role === 'student') return state.me.id;
+  return state.viewingStudentId;
+}
+
+async function renderLog(container){
+  const isTeacher = state.me.role === 'teacher';
+  const studentId = currentLogStudentId();
+
+  let pickerHtml = '';
+  if(isTeacher){
+    pickerHtml = `
+      <div class="student-picker">
+        <select id="studentPick">
+          ${state.roster.map(s=>`<option value="${s.id}" ${s.id===studentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}
+        </select>
+      </div>`;
+  }
+
+  container.innerHTML = `
+    <div class="card streak-card" id="streakCard">Loading streak…</div>
+    <div class="card">
+      <h2>Practice Log</h2>
+      <p class="hint">${isTeacher ? "Track and review each student's practice time." : "Log your practice sessions here."}</p>
+      ${pickerHtml}
+      <div id="logBody">Loading…</div>
+    </div>
+    ${isTeacher ? `<div class="card" id="rosterOverviewCard"><h2>This week, at a glance</h2><div id="rosterOverview">Loading…</div></div>` : ''}
+  `;
+
+  if(isTeacher){
+    const sel = document.getElementById('studentPick');
+    if(sel) sel.onchange = ()=>{ state.viewingStudentId = sel.value; renderLog(container); };
+    renderRosterOverview();
+  }
+
+  if(!studentId){
+    document.getElementById('streakCard').innerHTML = '';
+    document.getElementById('logBody').innerHTML = `<p class="log-empty">No students on the roster yet.</p>`;
+    return;
+  }
+
+  const entries = (await sGet('practice:' + studentId, true)) || [];
+  const st = computeStreak(entries);
+  const streakEl = document.getElementById('streakCard');
+  if(streakEl){
+    streakEl.innerHTML = `
+      <div class="streak-mascot">${mascotSvg((state.roster.find(s=>s.id===studentId)||{}).mascot || defaultMascot(), streakMood(st.current))}</div>
+      <div class="streak-info">
+        <div class="streak-num display">${st.current} day${st.current===1?'':'s'}</div>
+        <div class="streak-sub">${st.current>0 ? `Keep it going! Best streak: ${st.best} days` : "No streak yet — practice today to start one!"}</div>
+        <div class="week-strip">${weekStrip(st.dates)}</div>
+      </div>
+    `;
+  }
+
+  const bodyEl = document.getElementById('logBody');
+  const weekTotal = sumThisWeek(entries);
+
+  bodyEl.innerHTML = `
+    <div class="week-total">${weekTotal} min this week</div>
+    ${!isTeacher ? `
+    <div class="timer-row">
+      <div class="timer-display display" id="timerDisplay">${formatMs(logTimer.running ? logTimer.elapsedMs + (Date.now()-logTimer.startedAt) : logTimer.elapsedMs)}</div>
+      <button class="btn" id="timerToggle">${logTimer.running ? 'Stop session' : 'Start session'}</button>
+    </div>
+    <div class="field-row" id="sessionNoteRow" style="${logTimer.running || logTimer.elapsedMs>0 ? '' : 'display:none'}">
+      <textarea id="sessionNotes" rows="2" placeholder="What did you work on?"></textarea>
+    </div>
+    <div class="field-row" id="saveRow" style="${(!logTimer.running && logTimer.elapsedMs>0) ? '' : 'display:none'}">
+      <button class="btn" id="saveSession">Save this session</button>
+      <button class="btn btn-ghost" id="discardSession">Discard</button>
+    </div>
+    <div class="manual-add">
+      <span style="font-size:13px;color:var(--ink-soft);font-weight:700;">Or add a past session:</span>
+      <input type="number" id="manualMins" placeholder="minutes" min="1">
+      <input type="text" id="manualNotes" placeholder="notes (optional)">
+      <button class="btn btn-ghost" id="manualAdd">Add</button>
+    </div>
+    ` : ''}
+    <div id="entryList"></div>
+  `;
+
+  const listEl = document.getElementById('entryList');
+  if(entries.length === 0){
+    listEl.innerHTML = `<p class="log-empty">No sessions logged yet.</p>`;
+  } else {
+    listEl.innerHTML = entries.slice().reverse().map(en => `
+      <div class="log-entry">
+        <div>
+          <div>${escapeHtml(en.notes || '(no notes)')}</div>
+          <div class="meta">${en.date}</div>
+        </div>
+        <div class="mins">${en.minutes} min</div>
+      </div>
+    `).join('');
+  }
+
+  if(!isTeacher){
+    document.getElementById('timerToggle').onclick = ()=>{
+      if(logTimer.running){
+        stopSessionTimerAccumulate();
+      } else {
+        startSessionTimer();
+      }
+      renderLog(container);
+    };
+    const saveBtn = document.getElementById('saveSession');
+    if(saveBtn) saveBtn.onclick = async ()=>{
+      const mins = Math.max(1, Math.round(logTimer.elapsedMs/60000));
+      const notes = document.getElementById('sessionNotes').value.trim();
+      const result = await addLogEntry(studentId, mins, notes);
+      logTimer = { running:false, startedAt:null, elapsedMs:0, tickId:null };
+      renderLog(container);
+      renderMain();
+      if(result.newlyQualifies) showStreakCelebration(studentId, result.streak);
+    };
+    const discardBtn = document.getElementById('discardSession');
+    if(discardBtn) discardBtn.onclick = ()=>{
+      logTimer = { running:false, startedAt:null, elapsedMs:0, tickId:null };
+      renderLog(container);
+    };
+    document.getElementById('manualAdd').onclick = async ()=>{
+      const mins = parseInt(document.getElementById('manualMins').value, 10);
+      if(!mins || mins <= 0) return;
+      const notes = document.getElementById('manualNotes').value.trim();
+      const result = await addLogEntry(studentId, mins, notes);
+      renderLog(container);
+      renderMain();
+      if(result.newlyQualifies) showStreakCelebration(studentId, result.streak);
+    };
+  }
+}
+
+async function addLogEntry(studentId, minutes, notes){
+  const entries = (await sGet('practice:' + studentId, true)) || [];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayStr = toDateStr(today);
+  const alreadyQualifiedToday = entries.some(e => e.date === todayStr && e.minutes >= 5);
+  entries.push({ date: todayStr, minutes, notes });
+  await sSet('practice:' + studentId, entries, true);
+  const newlyQualifies = minutes >= 5 && !alreadyQualifiedToday;
+  const streak = computeStreak(entries).current;
+  return { newlyQualifies, streak };
+}
+
+function showStreakCelebration(studentId, streakCount){
+  const mascotKind = (state.roster.find(s=>s.id===studentId)||{}).mascot || defaultMascot();
+  const colors = ['var(--coral)','var(--teal)','var(--sun)','var(--lav)'];
+  const dots = Array.from({length:8}).map((_,i)=>
+    `<span class="confetti-dot" style="--angle:${i*45}deg; background:${colors[i%4]}"></span>`
+  ).join('');
+  const overlay = document.createElement('div');
+  overlay.className = 'streak-overlay';
+  overlay.innerHTML = `
+    <div class="streak-pop">
+      ${dots}
+      <span class="flame">🔥</span>
+      <div class="mascot-mini">${mascotSvg(mascotKind, 'excited')}</div>
+      <h3>${streakCount} day streak!</h3>
+      <p>Great practicing today — keep it going!</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=> overlay.classList.add('show'));
+  const dismiss = ()=>{
+    overlay.classList.remove('show');
+    setTimeout(()=> overlay.remove(), 300);
+  };
+  overlay.onclick = dismiss;
+  setTimeout(dismiss, 2600);
+}
+
+function formatMs(ms){
+  const totalSec = Math.floor(ms/1000);
+  const m = Math.floor(totalSec/60);
+  const s = totalSec % 60;
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+function sumThisWeek(entries){
+  const now = new Date();
+  const day = (now.getDay()+6)%7;
+  const monday = new Date(now); monday.setDate(now.getDate()-day); monday.setHours(0,0,0,0);
+  return entries.filter(e => new Date(e.date) >= monday).reduce((a,e)=>a+e.minutes,0);
+}
+
+async function renderRosterOverview(){
+  const container = document.getElementById('rosterOverview');
+  if(!container) return;
+  if(state.roster.length === 0){ container.innerHTML = `<p class="log-empty">No students yet.</p>`; return; }
+  const rows = await Promise.all(state.roster.map(async s=>{
+    const entries = (await sGet('practice:' + s.id, true)) || [];
+    const st = computeStreak(entries);
+    return { name: s.name, mins: sumThisWeek(entries), streak: st.current };
+  }));
+  container.innerHTML = `
+    <table class="roster">
+      <tr><th>Student</th><th>Minutes this week</th><th>Streak</th></tr>
+      ${rows.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td>${r.mins}</td><td>${r.streak>0 ? '🔥 '+r.streak : '—'}</td></tr>`).join('')}
+    </table>
+  `;
+}
+
+/* ================================================================
+   ASSIGNMENTS
+   ================================================================ */
+async function renderAssignments(container){
+  const isTeacher = state.me.role === 'teacher';
+
+  if(isTeacher){
+    container.innerHTML = `
+      <div class="card">
+        <h2>Assignments</h2>
+        <p class="hint">Set what each student should focus on this week.</p>
+        <div class="assign-form">
+          <select id="assignStudent">
+            ${state.roster.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}
+          </select>
+          <input type="text" id="assignText" placeholder="e.g. Scales in G major, 10 min daily" style="flex:1;min-width:200px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;">
+          <button class="btn" id="assignAdd">Assign</button>
+        </div>
+        <div class="student-picker">
+          <select id="assignViewStudent">
+            ${state.roster.map(s=>`<option value="${s.id}" ${s.id===state.viewingStudentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}
+          </select>
+        </div>
+        <div id="assignList">Loading…</div>
+      </div>
+    `;
+    if(state.roster.length === 0){
+      container.querySelector('.card').innerHTML += `<p class="log-empty">No students have joined this class yet — share its code or invite link from the bar above.</p>`;
+      return;
+    }
+    const viewSel = document.getElementById('assignViewStudent');
+    let viewId = state.viewingStudentId || state.roster[0].id;
+    viewSel.value = viewId;
+    viewSel.onchange = ()=>{ state.viewingStudentId = viewSel.value; renderAssignments(container); };
+
+    document.getElementById('assignAdd').onclick = async ()=>{
+      const text = document.getElementById('assignText').value.trim();
+      const sid = document.getElementById('assignStudent').value;
+      if(!text || !sid) return;
+      const list = (await sGet('assignments:' + sid, true)) || [];
+      list.push({ id: uid(), text, setBy: 'teacher', done: false });
+      await sSet('assignments:' + sid, list, true);
+      document.getElementById('assignText').value = '';
+      renderAssignments(container);
+    };
+
+    await renderAssignList(viewId, true);
+  } else {
+    container.innerHTML = `
+      <div class="card">
+        <h2>Assignments</h2>
+        <p class="hint">What your teacher wants you to work on, plus any goals of your own.</p>
+        <div class="assign-form">
+          <input type="text" id="myGoalText" placeholder="Add your own practice goal" style="flex:1;min-width:200px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;">
+          <button class="btn btn-ghost" id="myGoalAdd">Add</button>
+        </div>
+        <div id="assignList">Loading…</div>
+      </div>
+    `;
+    document.getElementById('myGoalAdd').onclick = async ()=>{
+      const text = document.getElementById('myGoalText').value.trim();
+      if(!text) return;
+      const list = (await sGet('assignments:' + state.me.id, true)) || [];
+      list.push({ id: uid(), text, setBy: 'student', done: false });
+      await sSet('assignments:' + state.me.id, list, true);
+      document.getElementById('myGoalText').value = '';
+      renderAssignments(container);
+    };
+    await renderAssignList(state.me.id, false);
+  }
+}
+
+async function renderAssignList(studentId, isTeacher){
+  const listEl = document.getElementById('assignList');
+  if(!listEl) return;
+  const list = (await sGet('assignments:' + studentId, true)) || [];
+  if(list.length === 0){
+    listEl.innerHTML = `<p class="log-empty">No assignments yet.</p>`;
+    return;
+  }
+  listEl.innerHTML = list.map(a => `
+    <div class="assign-item">
+      <input type="checkbox" data-id="${a.id}" ${a.done ? 'checked' : ''}>
+      <div style="flex:1">
+        <div class="assign-text ${a.done?'done':''}">${escapeHtml(a.text)}</div>
+        <div class="assign-meta">${a.setBy === 'teacher' ? 'Set by teacher' : 'Personal goal'}</div>
+      </div>
+      <button class="assign-del" data-id="${a.id}">remove</button>
+    </div>
+  `).join('');
+  listEl.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.onchange = async ()=>{
+      const l = (await sGet('assignments:' + studentId, true)) || [];
+      const item = l.find(x=>x.id===cb.dataset.id);
+      if(item){ item.done = cb.checked; await sSet('assignments:' + studentId, l, true); }
+      renderAssignList(studentId, isTeacher);
+    };
+  });
+  listEl.querySelectorAll('.assign-del').forEach(btn=>{
+    btn.onclick = async ()=>{
+      let l = (await sGet('assignments:' + studentId, true)) || [];
+      l = l.filter(x=>x.id !== btn.dataset.id);
+      await sSet('assignments:' + studentId, l, true);
+      renderAssignList(studentId, isTeacher);
+    };
+  });
+}
+
+/* ================= Go ================= */
+boot();
+
+})();
+</script>
+</body>
+</html>
